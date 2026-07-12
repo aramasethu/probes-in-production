@@ -1,0 +1,19 @@
+[project]
+name = "probes"
+version = "0.1.0"
+description = "RAG groundedness vs. parametric hallucination probes on Llama-3.1-8B"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "torch>=2.4.0",
+    "transformers>=4.45.0",
+    "accelerate>=0.34.0",
+    "huggingface-hub>=0.25.0",
+    "datasets>=3.0.0",
+    "scikit-learn>=1.5.0",
+    "numpy>=1.26.0",
+    "tqdm>=4.66.0",
+    "matplotlib>=3.10.9",
+]
+
+[tool.uv]
+package = false

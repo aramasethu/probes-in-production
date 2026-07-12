@@ -1,0 +1,312 @@
+{"statement": "Colombia is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Germany is Abuja.", "label": 0, "kind": "capital"}
+{"statement": "Sixty-one is greater than twenty-two.", "label": 1, "kind": "compare"}
+{"statement": "The chemical symbol for carbon is Ag.", "label": 0, "kind": "element"}
+{"statement": "The capital of India is New Delhi.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Iceland is Ottawa.", "label": 0, "kind": "capital"}
+{"statement": "Fifty-three is greater than sixty-six.", "label": 0, "kind": "compare"}
+{"statement": "Nine plus fourteen equals twenty-three.", "label": 1, "kind": "arith"}
+{"statement": "Japan is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Greece is Moscow.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Sweden is Stockholm.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for lead is Pb.", "label": 1, "kind": "element"}
+{"statement": "Sixty-eight is greater than forty-four.", "label": 1, "kind": "compare"}
+{"statement": "Thirty-nine plus twenty-three equals sixty-two.", "label": 1, "kind": "arith"}
+{"statement": "Argentina is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "Iceland is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Algeria is Bern.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Ghana is Accra.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Brazil is Brasilia.", "label": 1, "kind": "capital"}
+{"statement": "Eight is greater than twenty-seven.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Poland is Warsaw.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Colombia is Bogota.", "label": 1, "kind": "capital"}
+{"statement": "Cuba is located in North America.", "label": 1, "kind": "continent"}
+{"statement": "The chemical symbol for gold is Hg.", "label": 0, "kind": "element"}
+{"statement": "Norway is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Italy is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Turkey is Kyiv.", "label": 0, "kind": "capital"}
+{"statement": "Twenty-four is greater than eight.", "label": 1, "kind": "compare"}
+{"statement": "Twenty-three plus twenty-nine equals fifty-two.", "label": 1, "kind": "arith"}
+{"statement": "Colombia is located in Europe.", "label": 0, "kind": "continent"}
+{"statement": "The chemical symbol for silver is O.", "label": 0, "kind": "element"}
+{"statement": "Twenty-two is greater than sixty-one.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Iran is Tehran.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for mercury is Hg.", "label": 1, "kind": "element"}
+{"statement": "Nine is greater than twenty-nine.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Netherlands is Amsterdam.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Australia is Canberra.", "label": 1, "kind": "capital"}
+{"statement": "Forty-six is greater than forty.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Chile is Santiago.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Mexico is Mexico City.", "label": 1, "kind": "capital"}
+{"statement": "Chile is located in Europe.", "label": 0, "kind": "continent"}
+{"statement": "Iran is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Hungary is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Thirty-nine plus twenty-three equals sixty.", "label": 0, "kind": "arith"}
+{"statement": "Sixteen plus four equals twenty.", "label": 1, "kind": "arith"}
+{"statement": "The capital of Morocco is Kyiv.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Pakistan is Islamabad.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Nigeria is Abuja.", "label": 1, "kind": "capital"}
+{"statement": "Seven plus twenty-five equals twenty-nine.", "label": 0, "kind": "arith"}
+{"statement": "Venezuela is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "The chemical symbol for carbon is C.", "label": 1, "kind": "element"}
+{"statement": "Ghana is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Indonesia is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "Fifteen plus five equals twenty.", "label": 1, "kind": "arith"}
+{"statement": "Twenty-three is greater than fifty-seven.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Vietnam is Ottawa.", "label": 0, "kind": "capital"}
+{"statement": "Kenya is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "The chemical symbol for potassium is Zn.", "label": 0, "kind": "element"}
+{"statement": "Ten is greater than thirty-nine.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Belgium is Brussels.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Iraq is Athens.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for zinc is Zn.", "label": 1, "kind": "element"}
+{"statement": "The capital of Chile is Algiers.", "label": 0, "kind": "capital"}
+{"statement": "Australia is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Thirty-six plus six equals thirty-nine.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Iraq is Baghdad.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Switzerland is Brussels.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Austria is Vienna.", "label": 1, "kind": "capital"}
+{"statement": "Thirty-nine plus nineteen equals fifty-nine.", "label": 0, "kind": "arith"}
+{"statement": "Nineteen plus nine equals thirty-one.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Romania is Bucharest.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Nigeria is Baghdad.", "label": 0, "kind": "capital"}
+{"statement": "Fifteen plus thirty-nine equals fifty-five.", "label": 0, "kind": "arith"}
+{"statement": "Greece is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Turkey is Ankara.", "label": 1, "kind": "capital"}
+{"statement": "Sixteen plus four equals twenty-two.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Venezuela is Caracas.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Switzerland is Bern.", "label": 1, "kind": "capital"}
+{"statement": "Pakistan is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Twenty-nine is greater than nine.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Cambodia is Stockholm.", "label": 0, "kind": "capital"}
+{"statement": "Forty is greater than forty-six.", "label": 0, "kind": "compare"}
+{"statement": "The capital of Greece is Athens.", "label": 1, "kind": "capital"}
+{"statement": "Norway is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Vietnam is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Spain is Santiago.", "label": 0, "kind": "capital"}
+{"statement": "Twenty-two plus nine equals thirty-one.", "label": 1, "kind": "arith"}
+{"statement": "Thailand is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Argentina is Buenos Aires.", "label": 1, "kind": "capital"}
+{"statement": "Thirty-three plus twenty-four equals fifty-seven.", "label": 1, "kind": "arith"}
+{"statement": "Kenya is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "Russia is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Eight is greater than twenty-four.", "label": 0, "kind": "compare"}
+{"statement": "Thirty-eight plus nine equals forty-eight.", "label": 0, "kind": "arith"}
+{"statement": "Sweden is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Vietnam is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Vietnam is Hanoi.", "label": 1, "kind": "capital"}
+{"statement": "Ukraine is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Iceland is Reykjavik.", "label": 1, "kind": "capital"}
+{"statement": "Netherlands is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Two is greater than sixty-one.", "label": 0, "kind": "compare"}
+{"statement": "France is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Cuba is Ottawa.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Italy is Rome.", "label": 1, "kind": "capital"}
+{"statement": "Spain is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Denmark is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Russia is Moscow.", "label": 1, "kind": "capital"}
+{"statement": "Portugal is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Indonesia is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Finland is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "Argentina is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Pakistan is Brussels.", "label": 0, "kind": "capital"}
+{"statement": "The capital of China is Beijing.", "label": 1, "kind": "capital"}
+{"statement": "India is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Cambodia is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Portugal is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Belgium is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Six is greater than thirteen.", "label": 0, "kind": "compare"}
+{"statement": "Cuba is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Ghana is Nairobi.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Ukraine is Kyiv.", "label": 1, "kind": "capital"}
+{"statement": "Sweden is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The chemical symbol for gold is Au.", "label": 1, "kind": "element"}
+{"statement": "The capital of Norway is Abuja.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Brazil is Copenhagen.", "label": 0, "kind": "capital"}
+{"statement": "Seven plus twenty-five equals thirty-two.", "label": 1, "kind": "arith"}
+{"statement": "The chemical symbol for mercury is He.", "label": 0, "kind": "element"}
+{"statement": "The capital of Hungary is Budapest.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Belgium is Bogota.", "label": 0, "kind": "capital"}
+{"statement": "Algeria is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "Forty-four is greater than sixty-eight.", "label": 0, "kind": "compare"}
+{"statement": "Spain is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Norway is Oslo.", "label": 1, "kind": "capital"}
+{"statement": "Twenty-three plus twenty-nine equals forty-nine.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Canada is Brussels.", "label": 0, "kind": "capital"}
+{"statement": "Twenty-six is greater than fifty-one.", "label": 0, "kind": "compare"}
+{"statement": "Canada is located in North America.", "label": 1, "kind": "continent"}
+{"statement": "Thirty-four is greater than forty-six.", "label": 0, "kind": "compare"}
+{"statement": "Thirteen plus nine equals twenty-two.", "label": 1, "kind": "arith"}
+{"statement": "The chemical symbol for calcium is He.", "label": 0, "kind": "element"}
+{"statement": "Romania is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Three plus thirty-six equals forty.", "label": 0, "kind": "arith"}
+{"statement": "The chemical symbol for oxygen is O.", "label": 1, "kind": "element"}
+{"statement": "Nine plus fourteen equals twenty-five.", "label": 0, "kind": "arith"}
+{"statement": "Nigeria is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Fifteen plus thirty-nine equals fifty-four.", "label": 1, "kind": "arith"}
+{"statement": "The chemical symbol for zinc is Na.", "label": 0, "kind": "element"}
+{"statement": "China is located in Europe.", "label": 0, "kind": "continent"}
+{"statement": "Peru is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Bolivia is New Delhi.", "label": 0, "kind": "capital"}
+{"statement": "Seventeen plus three equals twenty.", "label": 1, "kind": "arith"}
+{"statement": "Mexico is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Twenty is greater than two.", "label": 1, "kind": "compare"}
+{"statement": "Seventeen plus three equals twenty-three.", "label": 0, "kind": "arith"}
+{"statement": "Russia is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Chile is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Thailand is Bangkok.", "label": 1, "kind": "capital"}
+{"statement": "Sixty is greater than sixty-five.", "label": 0, "kind": "compare"}
+{"statement": "Hungary is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Thirty-nine is greater than ten.", "label": 1, "kind": "compare"}
+{"statement": "Germany is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The chemical symbol for lead is Sn.", "label": 0, "kind": "element"}
+{"statement": "Venezuela is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "Thailand is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Spain is Madrid.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Sweden is Moscow.", "label": 0, "kind": "capital"}
+{"statement": "Twenty-seven is greater than eight.", "label": 1, "kind": "compare"}
+{"statement": "The chemical symbol for copper is Cu.", "label": 1, "kind": "element"}
+{"statement": "Turkey is located in Oceania.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Egypt is Reykjavik.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Morocco is Rabat.", "label": 1, "kind": "capital"}
+{"statement": "Twenty-two plus nine equals thirty-two.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Ireland is Dublin.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for oxygen is Au.", "label": 0, "kind": "element"}
+{"statement": "The capital of Netherlands is Rabat.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Algeria is Algiers.", "label": 1, "kind": "capital"}
+{"statement": "Sixteen is greater than thirty-three.", "label": 0, "kind": "compare"}
+{"statement": "Romania is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "The chemical symbol for hydrogen is H.", "label": 1, "kind": "element"}
+{"statement": "The capital of Italy is Jakarta.", "label": 0, "kind": "capital"}
+{"statement": "Sixty-one is greater than two.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Romania is New Delhi.", "label": 0, "kind": "capital"}
+{"statement": "Thirteen is greater than six.", "label": 1, "kind": "compare"}
+{"statement": "Sixty-six is greater than fifty-three.", "label": 1, "kind": "compare"}
+{"statement": "Ireland is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Peru is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Peru is Kyiv.", "label": 0, "kind": "capital"}
+{"statement": "Thirty-three is greater than fifty.", "label": 0, "kind": "compare"}
+{"statement": "Brazil is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "Egypt is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "France is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Turkey is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Netherlands is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Thirteen plus nine equals twenty-three.", "label": 0, "kind": "arith"}
+{"statement": "The capital of Portugal is Phnom Penh.", "label": 0, "kind": "capital"}
+{"statement": "The capital of India is Brasilia.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Colombia is Moscow.", "label": 0, "kind": "capital"}
+{"statement": "Ireland is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "Iran is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "Denmark is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Argentina is Oslo.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Ethiopia is Addis Ababa.", "label": 1, "kind": "capital"}
+{"statement": "Bolivia is located in South America.", "label": 1, "kind": "continent"}
+{"statement": "Nigeria is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "Two is greater than twenty.", "label": 0, "kind": "compare"}
+{"statement": "Thirteen is greater than thirty-four.", "label": 0, "kind": "compare"}
+{"statement": "Cambodia is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Algeria is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "The chemical symbol for helium is He.", "label": 1, "kind": "element"}
+{"statement": "The capital of Ukraine is Bucharest.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Ireland is Bucharest.", "label": 0, "kind": "capital"}
+{"statement": "Forty-five is greater than fifty-six.", "label": 0, "kind": "compare"}
+{"statement": "Morocco is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "Four plus three equals five.", "label": 0, "kind": "arith"}
+{"statement": "Ghana is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Portugal is Lisbon.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for nitrogen is Sn.", "label": 0, "kind": "element"}
+{"statement": "Italy is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Japan is Tokyo.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for helium is Hg.", "label": 0, "kind": "element"}
+{"statement": "Sixteen plus twenty-five equals forty-one.", "label": 1, "kind": "arith"}
+{"statement": "Brazil is located in Europe.", "label": 0, "kind": "continent"}
+{"statement": "Nineteen plus thirty-five equals fifty-four.", "label": 1, "kind": "arith"}
+{"statement": "The capital of Cuba is Havana.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Ethiopia is Baghdad.", "label": 0, "kind": "capital"}
+{"statement": "Eight plus eleven equals nineteen.", "label": 1, "kind": "arith"}
+{"statement": "The chemical symbol for hydrogen is Sn.", "label": 0, "kind": "element"}
+{"statement": "The capital of Indonesia is Hanoi.", "label": 0, "kind": "capital"}
+{"statement": "Ethiopia is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Egypt is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Poland is Baghdad.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for calcium is Ca.", "label": 1, "kind": "element"}
+{"statement": "The capital of China is Bangkok.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for silver is Ag.", "label": 1, "kind": "element"}
+{"statement": "The chemical symbol for iron is Fe.", "label": 1, "kind": "element"}
+{"statement": "Iraq is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Nineteen plus thirty-five equals fifty-two.", "label": 0, "kind": "arith"}
+{"statement": "Austria is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Japan is Madrid.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Canada is Ottawa.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Denmark is Copenhagen.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Hungary is Lima.", "label": 0, "kind": "capital"}
+{"statement": "Thirty-nine plus nineteen equals fifty-eight.", "label": 1, "kind": "arith"}
+{"statement": "The chemical symbol for nitrogen is N.", "label": 1, "kind": "element"}
+{"statement": "The capital of Mexico is Brasilia.", "label": 0, "kind": "capital"}
+{"statement": "Fifteen plus five equals twenty-three.", "label": 0, "kind": "arith"}
+{"statement": "India is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Cambodia is Phnom Penh.", "label": 1, "kind": "capital"}
+{"statement": "Austria is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Thailand is Buenos Aires.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for copper is Ca.", "label": 0, "kind": "element"}
+{"statement": "Thirty-six plus six equals forty-two.", "label": 1, "kind": "arith"}
+{"statement": "Thirty-four is greater than thirteen.", "label": 1, "kind": "compare"}
+{"statement": "Belgium is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "China is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Finland is Copenhagen.", "label": 0, "kind": "capital"}
+{"statement": "Greece is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Thirty-eight plus nine equals forty-seven.", "label": 1, "kind": "arith"}
+{"statement": "Four plus three equals seven.", "label": 1, "kind": "arith"}
+{"statement": "The capital of Iran is Bucharest.", "label": 0, "kind": "capital"}
+{"statement": "The capital of France is Budapest.", "label": 0, "kind": "capital"}
+{"statement": "The capital of Denmark is Amsterdam.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for sodium is Hg.", "label": 0, "kind": "element"}
+{"statement": "Fifty-one is greater than twenty-six.", "label": 1, "kind": "compare"}
+{"statement": "Japan is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Poland is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Australia is located in Oceania.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Finland is Helsinki.", "label": 1, "kind": "capital"}
+{"statement": "Forty-six is greater than thirty-four.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Russia is Jakarta.", "label": 0, "kind": "capital"}
+{"statement": "Thirty-three plus twenty-four equals fifty-four.", "label": 0, "kind": "arith"}
+{"statement": "Switzerland is located in South America.", "label": 0, "kind": "continent"}
+{"statement": "Ethiopia is located in Africa.", "label": 1, "kind": "continent"}
+{"statement": "Eight plus eleven equals twenty-two.", "label": 0, "kind": "arith"}
+{"statement": "Germany is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Thirty-three is greater than sixteen.", "label": 1, "kind": "compare"}
+{"statement": "Sixteen plus twenty-five equals thirty-nine.", "label": 0, "kind": "arith"}
+{"statement": "Three plus thirty-six equals thirty-nine.", "label": 1, "kind": "arith"}
+{"statement": "Sixty-five is greater than sixty.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Kenya is Nairobi.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Indonesia is Jakarta.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Egypt is Cairo.", "label": 1, "kind": "capital"}
+{"statement": "The chemical symbol for tin is Sn.", "label": 1, "kind": "element"}
+{"statement": "The capital of Peru is Lima.", "label": 1, "kind": "capital"}
+{"statement": "Fifty-nine is greater than eleven.", "label": 1, "kind": "compare"}
+{"statement": "The chemical symbol for potassium is K.", "label": 1, "kind": "element"}
+{"statement": "The chemical symbol for iron is Hg.", "label": 0, "kind": "element"}
+{"statement": "The capital of Germany is Berlin.", "label": 1, "kind": "capital"}
+{"statement": "Fifty-seven is greater than twenty-three.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Venezuela is Mexico City.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for tin is Cu.", "label": 0, "kind": "element"}
+{"statement": "Iraq is located in Asia.", "label": 1, "kind": "continent"}
+{"statement": "Fifty is greater than thirty-three.", "label": 1, "kind": "compare"}
+{"statement": "The capital of Kenya is Warsaw.", "label": 0, "kind": "capital"}
+{"statement": "Eleven is greater than fifty-nine.", "label": 0, "kind": "compare"}
+{"statement": "Finland is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "The capital of France is Paris.", "label": 1, "kind": "capital"}
+{"statement": "The capital of Australia is Rabat.", "label": 0, "kind": "capital"}
+{"statement": "The chemical symbol for sodium is Na.", "label": 1, "kind": "element"}
+{"statement": "Iceland is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Switzerland is located in Europe.", "label": 1, "kind": "continent"}
+{"statement": "Poland is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Bolivia is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Ukraine is located in Africa.", "label": 0, "kind": "continent"}
+{"statement": "The capital of Bolivia is La Paz.", "label": 1, "kind": "capital"}
+{"statement": "Nineteen plus nine equals twenty-eight.", "label": 1, "kind": "arith"}
+{"statement": "Mexico is located in North America.", "label": 1, "kind": "continent"}
+{"statement": "The capital of Austria is Copenhagen.", "label": 0, "kind": "capital"}
+{"statement": "Morocco is located in North America.", "label": 0, "kind": "continent"}
+{"statement": "Fifty-six is greater than forty-five.", "label": 1, "kind": "compare"}
+{"statement": "Canada is located in Asia.", "label": 0, "kind": "continent"}
+{"statement": "Pakistan is located in Oceania.", "label": 0, "kind": "continent"}

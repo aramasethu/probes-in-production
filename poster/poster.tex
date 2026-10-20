@@ -111,7 +111,7 @@
 
     \begin{block}{Probes in production}
 
-    \textbf{Activation probes are a well known interpretability tool. They are used extensively for safety by frontier labs. It is currently not straightforward to serve them on open models in production. This poster scratches the surface of whether it is possible to serve them alongside optimized inference, and what it costs.}
+    \textbf{Activation probes are a well-known interpretability tool. They are used extensively for safety by frontier labs. It is currently not straightforward to serve them on open models in production. This poster scratches the surface of whether it is possible to serve them alongside optimized inference, and what it costs.}
 
     \begin{table}
       \centering
@@ -128,7 +128,7 @@
     \end{table}
 
     \begin{itemize}
-      \item Probes are generally the first step in safety stack and 100\% of traffic goes through them and they then escalate ${\sim}$5--8\% to an LLM classifier.
+      \item Probes are usually the first step in the safety stack: they screen 100\% of traffic and escalate ${\sim}$5--8\% to an LLM classifier.
       \item How frontier labs serve these probes while keeping inference optimized is unclear; the ones we found run on engines they own or have forked.
     \end{itemize}
 
@@ -142,19 +142,21 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width=\linewidth]{figures/decode_step_probe.png}
+      \includegraphics[width=0.97\linewidth]{figures/decode_step_probe.png}
     \end{figure}
 
     One decode step of \textbf{Qwen2.5-1.5B} (28 layers), the model we measure,
-    in vLLM / SGLang. Every optimization removes something a probe needs:
+    in vLLM / SGLang. Common optimizations get in the way of what a probe needs:
 
     \begin{itemize}
-  \item Optimization during prefill: prefix caching and chunked prefill skip or
+  \item Optimization during prefill: prefix caching (RadixAttention in SGLang) and chunked prefill skip or
     split prompt tokens, so a probe never sees cached tokens and gets a long
     prompt's last token only in the final chunk.
   \item Optimization during decode: CUDA graphs and CPU--GPU overlap keep each
     step on the GPU with no Python, so a hook never runs (0 of 128) and a
-    per-token \texttt{.cpu()} makes the GPU wait (+19\%).
+    per-token \texttt{.cpu()} makes the GPU wait (+19\% on our laptop).
+    Continuous batching mixes all requests into one tensor, so scores must be
+    mapped back to each request.
 \end{itemize}
 
 \end{block}
@@ -254,7 +256,7 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width=0.72\linewidth]{figures/probe_cost.png}
+      \includegraphics[width=0.68\linewidth]{figures/probe_cost.png}
     \end{figure}
 
     Extra time per token vs.\ the same setup without the probe (laptop, HF)
@@ -286,9 +288,9 @@
     \begin{itemize}
       \item \textbf{The probe is free where it runs in place:} on device
         ($-0.6$\%, within noise) or inside the CUDA graph (0.0\%).
-      \item \textbf{Getting data out is the bill:} \texttt{.cpu()} per token
-        +19\%; CUDA graphs off so a hook runs +3\% (vLLM) to +11\% (SGLang);
-        vLLM \texttt{extract\_hidden\_states} +15\% at batch 32.
+      \item \textbf{The cost is moving the data to the probe:} \texttt{.cpu()}
+        every token +19\%; CUDA graphs off so a hook runs +3\% (vLLM) to +11\%
+        (SGLang); vLLM \texttt{extract\_hidden\_states} +15\% at batch 32.
       \item \textbf{With CUDA graphs on, hooks never run} (0 of 128 passes).
         Every path that runs the probe matches HF's p(true) on 8/8 statements.
     \end{itemize}

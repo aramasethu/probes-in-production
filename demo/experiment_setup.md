@@ -33,8 +33,14 @@ GPU phase.
   (symbols) — plus a smaller, deliberately harder `compare` and `arith` slice.
   The category split lets us report *where* a linear truth signal is clean vs.
   weak, not just an aggregate number.
-- **Split:** a fixed-seed train/test split; the seed is held constant for both
-  data generation and the split to keep the pipeline deterministic.
+- **Groups:** every statement carries an entity `group` — the country (shared
+  by its capital and continent rows), the element, or the unordered number
+  pair. 312 statements fall into 106 groups; matched true/false twins always
+  share a group.
+- **Split:** entity-grouped (`GroupShuffleSplit`, 30% of groups held out, test
+  n ≈ 90–100), repeated over 10 seeds, so no statement is ever scored while its
+  twin or a same-entity sibling is in training. Seeds are fixed for data
+  generation and splits, so the pipeline is deterministic.
 
 ## Activation extraction
 
@@ -50,19 +56,32 @@ GPU phase.
 
 - **Probe:** a linear classifier — `StandardScaler` + logistic regression — mapping
   a single hidden vector to true/false.
-- **Layer sweep:** one probe is trained and scored per layer on the held-out
-  split, producing an accuracy-vs-depth curve to localize the signal. The best
-  layer's probe is refit on all data and saved for the live loop.
-- **Closed loop:** `generate → read hidden state → probe`. The model generates a
-  completion and the same forward-pass hidden state that produced the text is fed
-  to the probe, so the truthfulness signal rides along the generation with no
-  extra model call.
+- **Layer sweep:** one probe per layer per split; we report mean ± SE of
+  held-out accuracy across the 10 splits and plot it as a band. SE across
+  overlapping resampled splits understates true variance, so it is a lower
+  bound on the noise.
+- **Layer selection (nested):** within each split's training set, 5-fold
+  `GroupKFold` validation picks the layer; that layer is scored once on the
+  split's test set. The mean of those scores is the headline accuracy — the
+  test set never chooses the layer. The deployed probe uses the layer chosen
+  most often by the inner validation, refit on all data.
+- **Per-category accuracy:** at each split's chosen layer, pooled over splits,
+  reported with the number of distinct statements and groups behind it.
+- **Closed loop:** `generate → read hidden state → probe`. The probe reads the
+  layer-L hidden state from the *same* `generate()` call
+  (`output_hidden_states=True, return_dict_in_generate=True`) at the last
+  generated content token, so there is no extra model call.
 
 ## Cost measurement protocol
 
 Inference cost is measured three ways on MPS. Timing follows standard async-GPU
 hygiene: `torch.mps.synchronize()` brackets every measured region, each region is
-warmed up before timing, and all reported values are medians over repeated runs.
+warmed up before timing, and every value is a median with its interquartile
+range (IQR). Overhead percentages carry a 95% bootstrap CI (5,000 resamples of
+both arms' timing samples); an overhead whose CI spans zero is reported as
+"within noise". Variants being compared are run interleaved (round-robin) so
+thermal and background drift hit them equally. The decode loop uses 20 runs per
+variant; the forward-pass comparison 30 per arm.
 Tiny on-device ops are amortized over a queued loop with a single trailing sync
 (the production pattern: queue work, sync only when the value is needed).
 
@@ -96,39 +115,71 @@ device→host transfer cost is ultimately a function of.
 
 Two questions this laptop round is scoped to answer: is the probe signal real and
 localized (correctness), and what does reading activations cost (demand side).
-Both come back cleanly.
+Both hold up under entity-grouped, repeated-split evaluation and repeated,
+CI-reported timing; the one new caveat is that the probe must be trained in the
+context it is deployed in.
 
 ## The probe signal is real and localized in depth
 
-A linear probe swept across all 29 hidden-state layers rises from chance in the
-early layers to a mid-network peak, then plateaus:
+A linear probe swept across all 29 hidden-state layers, over 10 entity-grouped
+splits (mean ± SE, test n ≈ 96, chance 0.500), rises from chance to a broad
+mid-to-late plateau:
 
-- **Layers 0–5:** ≈ 0.50 (chance) — truth is not yet linearly readable at the
-  input.
-- **Layers 6–10:** sharp climb (0.64 → 0.85).
-- **Layer 14:** peak held-out accuracy **0.915** (chance 0.500).
-- **Layers 15–28:** high plateau (≈ 0.85–0.90).
+- **Layer 0:** 0.500 — the last token is always "." so the embedding is
+  uninformative.
+- **Layers 1–6:** 0.53–0.70. Above chance, but attributable to surface cues in
+  the dataset rather than truth (e.g. "Europe" is the true continent in 21 of
+  25 continent rows that name it; `compare` reaches 0.86 by layer 4).
+- **Layers 7–12:** sharp climb (0.80 → 0.90).
+- **Layers 13–28:** plateau at **0.91–0.92**; every layer is within 0.02 of the
+  best mean (layer 16, 0.924 ± 0.006) and within split-to-split noise of its
+  neighbours. No single peak layer is distinguishable.
+- **Nested estimate** (layer chosen by inner validation on train, scored once on
+  test): **0.918 ± 0.005**. Inner validation chose layers 14–26 across splits;
+  layer 15 most often (3/10), which is the deployed probe.
 
 The rise-then-plateau is the substantive finding: the "is this true?" signal is
-*computed* in the middle of the network, not present at the input and not
-trivially decodable early. A single linear read suffices to recover it.
+*computed* in the middle of the network and stays linearly readable from there
+on; it is not present at the input. A single linear read suffices to recover it.
 
 ## The signal tracks knowledge, not ground truth
 
-Per-category accuracy at the best layer (14), on the held-out split:
+Per-category accuracy at each split's inner-chosen layer, pooled over the 10
+splits. `n_unique` is the number of distinct statements that appeared in any
+test set (the SE uses it; pooled predictions repeat statements):
 
-| Category  | Accuracy | n  |
-|-----------|----------|----|
-| capital   | 1.000    | 23 |
-| element   | 1.000    | 11 |
-| continent | 0.969    | 32 |
-| compare   | 0.923    | 13 |
-| arith     | 0.600    | 15 |
+| Category  | Accuracy | ± SE  | n_unique | groups |
+|-----------|----------|-------|----------|--------|
+| capital   | 0.997    | 0.006 | 98       | 50     |
+| continent | 0.953    | 0.021 | 98       | 50     |
+| element   | 0.953    | 0.037 | 32       | 16     |
+| compare   | 0.950    | 0.035 | 38       | 20     |
+| arith     | 0.597    | 0.078 | 40       | 20     |
 
 Truth-as-a-direction is cleanest for factual recall the model reliably knows
-(capitals, element symbols, continents) and markedly weaker for arithmetic. The
+(capitals, continents, element symbols) and markedly weaker for arithmetic. The
 useful caveat: the probe reads what the model *represents* as true, which tracks
-its knowledge, not external ground truth.
+its knowledge, not external ground truth. The small slices carry ±0.04–0.08
+uncertainty, so only the arithmetic gap is clearly resolved.
+
+## The probe needs to be trained in its deployment context
+
+Reading the hidden state from the same `generate()` call works mechanically
+(it matches a teacher-forced forward pass to 1e-6 relative error), but the
+probe trained on *raw* statements does not transfer to the assistant-turn
+context as-is. With the 312 statements re-framed as assistant replies inside
+the chat template (layer 15, last "."):
+
+| Probe | Accuracy |
+|-------|----------|
+| trained on raw statements, applied in-context | **0.500** (predicts FALSE for everything) — yet AUC **0.951** |
+| same, after re-centring in-context activations to the raw mean | 0.872 ± 0.017 |
+| trained on in-context activations (10 grouped splits) | **0.934 ± 0.008** |
+
+The truth *direction* survives the context change (AUC 0.95); the offset does
+not. A deployable closed loop therefore needs a probe trained on activations
+extracted in the deployment format. *(Scratch measurement, not yet part of the
+pipeline; making it so needs an in-context extraction mode in `02_extract.py`.)*
 
 ## Data volume the extraction implies
 
@@ -144,22 +195,30 @@ device→host transfer once activations leave the accelerator.
 
 ## Inference cost: the probe is free; off-device access is the bill
 
-*(Recorded `05_cost.py` run on MPS; medians with `torch.mps.synchronize()`
-bracketing every measured region.)*
+*(Recorded `05_cost.py` run on MPS: medians with IQR, `torch.mps.synchronize()`
+bracketing every measured region, compared variants interleaved, overheads with
+95% bootstrap CIs. Forward pass: 30 runs per arm; decode loop: 20 runs per
+variant of a 48-token greedy decode, probe at layer 15 every step.)*
 
-| Cost | Measured | Reading |
-|------|----------|---------|
-| `output_hidden_states=True` | **≈ 0%** (−0.7%) | activations are already computed; keeping them is ~free |
-| Probe compute, isolated | on-device **40 µs** vs `.cpu()` **112 µs** | probe FLOPs are trivial; the gap is the forced per-call device sync |
-| Probe in a 48-token decode loop | on-device **−0.4%** (free) vs `.cpu()`/token **+24.3%** | the headline |
+| Cost | Median (IQR) | Overhead [95% CI] |
+|------|--------------|-------------------|
+| Forward pass, `output_hidden_states=False` | 32.45 ms (32.10–32.71) | — |
+| Forward pass, `output_hidden_states=True` | 32.37 ms (32.12–32.71) | −0.2% [−1.0, +0.8] — **within noise** |
+| Probe compute, on-device (per call) | 42.1 µs (41.6–43.2) | — |
+| Probe compute, via `.cpu().numpy()` | 109.4 µs (107.7–110.7) | 2.6× [2.5×, 2.7×] |
+| Decode loop, model only | 1327 ms (1308–1342), 36.2 tok/s | — |
+| Decode loop + on-device probe | 1319 ms (1307–1365), 36.4 tok/s | −0.6% [−1.9, +2.2] — **within noise** |
+| Decode loop + `.cpu()` probe per token | 1580 ms (1570–1627), 30.4 tok/s | **+19.1% [+17.7, +21.7]** |
 
-The same probe, applied two ways, is either free or a ~24% throughput tax. The
-entire difference is a `hidden.cpu().numpy()` per token, which forces a device
-sync each step and serializes the decode loop. Kept on-device (scaler + logistic
-regression folded into one `W·h + b`), it costs nothing.
+The same probe, applied two ways, is either unmeasurable (on-device: the CI
+spans zero, upper bound ≈ +2%) or a ~19% decode-latency tax (+5.3 ms/token).
+The entire difference is a `hidden.cpu().numpy()` per token, which forces a
+device sync each step and serializes the decode loop. Kept on-device (scaler +
+logistic regression folded into one `W·h + b`), its cost is below what this
+benchmark can resolve.
 
 **Bridge to the GPU phase.** Unified memory makes the on-device path ~free on a
-Mac, so the measured +24% is a *lower bound* on the device→host transfer that
+Mac, so the measured +19% is a *lower bound* on the device→host transfer that
 dominates on discrete GPUs — where it will be larger, and compounded by CUDA
 graphs, continuous batching, tensor parallelism, and quantization. Whether that
 infra cost ultimately justifies probes is a GPU-phase decision this laptop test

@@ -1,0 +1,27 @@
+% Section 1: Probes in production
+% Needs in preamble: \usepackage{booktabs,tabularx}
+\section*{Probes in production}
+
+\textbf{Activation probes are small classifiers that read a model's hidden states. In 2026 they moved from research into frontier serving, and every public deployment is a safety screen.}
+
+\vspace{0.5em}
+\noindent
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+\textbf{Who} & \textbf{Model} & \textbf{How it is served} \\
+\midrule
+Anthropic       & Claude Opus 4.7--5.5   & Probe screens all traffic $\rightarrow$ classifier $\rightarrow$ block (cyber, prompt injection) \\
+Google DeepMind & Gemini 2.5 Flash, 4 Argon & Mid-layer attention probe on input $\rightarrow$ Gemini classifier (cyber, bio) \\
+OpenAI          & GPT-5.6 Sol, Terra     & During decode: pauses the stream $\rightarrow$ safety reasoner \\
+Goodfire        & Kimi K3, GLM 5.3       & Probe in a \emph{private SGLang fork} $\rightarrow$ LLM judge (cyber) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\begin{itemize}
+  \item \textbf{Cascade:} the probe screens 100\% of traffic and escalates ${\sim}$5--8\% to an LLM classifier.
+  \item \textbf{The math is free:} an all-layer probe costs ${\sim}$377K FLOPs/token vs.\ ${\sim}$8 GFLOPs/token for a 4B model.
+  \item \textbf{The serving is not:} no lab publishes latency or how activations leave its engine; every decode-time blocking probe runs on an engine its operator owns or forked.
+\end{itemize}
+
+{\footnotesize Sources: Anthropic system cards \& arXiv 2601.04603; GDM arXiv 2601.11516 \& Gemini 4 blog; OpenAI GPT-5.6 system card; Goodfire (Oct 2026).}

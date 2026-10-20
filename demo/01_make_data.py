@@ -11,6 +11,12 @@ per-category breakdown.
 
 For each true statement we mint a matched false one by swapping in a wrong
 (but plausible) value, keeping surface form balanced across labels.
+
+Every row also carries a `group` id naming the entity it is about (the
+country for capital+continent rows, the element, the unordered number pair for
+arith/compare). Matched true/false twins share a group, and so do all rows
+about the same country. 03_sweep.py splits by group, so a twin (or a
+same-entity row) never sits on the other side of the train/test boundary.
 """
 from __future__ import annotations
 
@@ -86,26 +92,27 @@ def main() -> None:
 
     for country, (city, continent) in COUNTRIES.items():
         # capital: true + corrupted (wrong capital from another country)
+        g = f"country:{country}"
         rows.append({"statement": f"The capital of {country} is {city}.",
-                     "label": 1, "kind": "capital"})
+                     "label": 1, "kind": "capital", "group": g})
         wrong_city = rng.choice([c for c in cities if c != city])
         rows.append({"statement": f"The capital of {country} is {wrong_city}.",
-                     "label": 0, "kind": "capital"})
+                     "label": 0, "kind": "capital", "group": g})
         # continent: true + corrupted (wrong continent)
         rows.append({"statement": f"{country} is located in {continent}.",
-                     "label": 1, "kind": "continent"})
+                     "label": 1, "kind": "continent", "group": g})
         wrong_cont = rng.choice([c for c in continents if c != continent])
         rows.append({"statement": f"{country} is located in {wrong_cont}.",
-                     "label": 0, "kind": "continent"})
+                     "label": 0, "kind": "continent", "group": g})
 
     # element symbols: true + corrupted
     symbols = list(ELEMENTS.values())
     for name, sym in ELEMENTS.items():
         rows.append({"statement": f"The chemical symbol for {name} is {sym}.",
-                     "label": 1, "kind": "element"})
+                     "label": 1, "kind": "element", "group": f"element:{name}"})
         wrong = rng.choice([s for s in symbols if s != sym])
         rows.append({"statement": f"The chemical symbol for {name} is {wrong}.",
-                     "label": 0, "kind": "element"})
+                     "label": 0, "kind": "element", "group": f"element:{name}"})
 
     # arithmetic (addition): true + corrupted result  -- the harder slice
     seen = set()
@@ -115,13 +122,14 @@ def main() -> None:
             continue
         seen.add((a, b))
         c = a + b
+        g = f"arith:{min(a, b)},{max(a, b)}"   # a+b and b+a are one group
         rows.append({"statement": f"{cap(num_to_words(a))} plus "
                      f"{num_to_words(b)} equals {num_to_words(c)}.",
-                     "label": 1, "kind": "arith"})
+                     "label": 1, "kind": "arith", "group": g})
         off = rng.choice([-3, -2, -1, 1, 2, 3])
         rows.append({"statement": f"{cap(num_to_words(a))} plus "
                      f"{num_to_words(b)} equals {num_to_words(c + off)}.",
-                     "label": 0, "kind": "arith"})
+                     "label": 0, "kind": "arith", "group": g})
 
     # comparisons: true + corrupted (flip the relation)  -- the harder slice
     seen.clear()
@@ -131,10 +139,13 @@ def main() -> None:
             continue
         seen.add((a, b))
         hi, lo = max(a, b), min(a, b)
+        g = f"compare:{lo},{hi}"
         rows.append({"statement": f"{cap(num_to_words(hi))} is greater "
-                     f"than {num_to_words(lo)}.", "label": 1, "kind": "compare"})
+                     f"than {num_to_words(lo)}.", "label": 1, "kind": "compare",
+                     "group": g})
         rows.append({"statement": f"{cap(num_to_words(lo))} is greater "
-                     f"than {num_to_words(hi)}.", "label": 0, "kind": "compare"})
+                     f"than {num_to_words(hi)}.", "label": 0, "kind": "compare",
+                     "group": g})
 
     rng.shuffle(rows)
 
@@ -149,6 +160,8 @@ def main() -> None:
     for r in rows:
         by_kind[r["kind"]] = by_kind.get(r["kind"], 0) + 1
     print(f"[data] by kind: {by_kind}")
+    print(f"[data] {len({r['group'] for r in rows})} entity groups "
+          f"(split unit for 03_sweep.py)")
     print("[data] samples:")
     for r in rows[:6]:
         print(f"    [{r['label']}] {r['statement']}")

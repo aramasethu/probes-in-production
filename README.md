@@ -31,7 +31,7 @@ Extra time per token vs. the engine's default (CUDA graphs on). Qwen2.5-1.5B, bf
 | SGLang: `return_hidden_states` | final layer only | +0.1% | +0.2% |
 
 \*also turns off SGLang's overlap scheduler. `extract_hidden_states` is compared with
-vLLM's default on the same multiprocess engine. Charts: `python demo/gpu/plot_poster.py`.
+vLLM's default on the same multiprocess engine. Charts: run `demo/gpu/plot_poster.py` after `run.py`.
 
 ## What's here
 

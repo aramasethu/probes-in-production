@@ -111,11 +111,9 @@ def probe_cost(rows, out):
                        plt.Rectangle((0, 0), 1, 1, color=ORANGE)],
               labels=["batch 1", "batch 32"], loc="lower right", frameon=False,
               fontsize=15)
-    fig.suptitle("In the graph the probe is free. Getting data out is not.",
-                 x=0.02, ha="left", fontsize=21, fontweight="bold")
     fig.text(0.01, 0.01, "Qwen2.5-1.5B, NVIDIA L4, bf16.  *also turns off SGLang's "
              "overlap scheduler.", fontsize=12, color=INK2)
-    fig.tight_layout(rect=(0, 0.03, 1, 0.96))
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(out, dpi=300)
     plt.close(fig)
 

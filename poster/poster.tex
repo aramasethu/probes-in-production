@@ -246,20 +246,13 @@
 
   \begin{block}{Results}
 
-    \heading{Laptop: the signal is real}
+    Our probe: a linear truth probe at layer 15 of Qwen2.5-1.5B,
+    \textbf{0.92 $\pm$ 0.005} accuracy (bag-of-words baseline 0.50).
 
     \begin{figure}
       \centering
-      \includegraphics[width=0.5\linewidth]{figures/layer_sweep.png}
+      \includegraphics[width=0.72\linewidth]{figures/probe_cost.png}
     \end{figure}
-
-    A linear probe on the last-token residual stream of Qwen2.5-1.5B reads
-    truth from layer 13 on: \textbf{0.92 $\pm$ 0.005} (layer chosen in
-    training; 10 entity-grouped splits, 312 statements). A bag-of-words
-    baseline scores \textbf{0.50}. Factual recall is near-perfect; arithmetic
-    is at chance.
-
-    \heading{Laptop and GPU: what serving the probe costs}
 
     Extra time per token vs.\ the same setup without the probe (laptop, HF)
     or the engine's default with CUDA graphs on (vLLM, SGLang).
@@ -297,12 +290,11 @@
         Every path that runs the probe matches HF's p(true) on 8/8 statements.
     \end{itemize}
 
-    {\footnotesize Qwen2.5-1.5B-Instruct, probe at layer 15. Laptop: Apple
-    Silicon, fp32, 48-token decode, 20 runs (95\% CIs $[-1.9, +2.2]$ and
-    $[+17.7, +21.7]$). GPU: NVIDIA L4, bf16, 256 $\rightarrow$ 128 tokens,
-    median of 3; vLLM 0.31.0, SGLang 0.5.21. $^*$Also turns off SGLang's overlap
-    scheduler. $^\dagger$vs.\ vLLM's default on the same multiprocess engine.
-    The L4 is memory-bound, so graph losses grow on faster GPUs.
+    {\footnotesize Laptop: Apple Silicon, fp32, 48-token decode, 20 runs (95\% CIs
+    $[-1.9, +2.2]$ and $[+17.7, +21.7]$). GPU: NVIDIA L4, bf16, 256 $\rightarrow$ 128
+    tokens, median of 3. $^*$Also turns off SGLang's overlap scheduler.
+    $^\dagger$vs.\ vLLM's default on the same multiprocess engine. The L4 is
+    memory-bound, so graph losses should grow on faster GPUs.
     \textit{Caveat:} a probe trained on bare statements misfires in a chat
     template (AUC 0.95); train on the deployment format.}
 

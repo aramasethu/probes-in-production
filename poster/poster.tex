@@ -272,11 +272,11 @@
         \midrule
         HF, L4         & probe inside the CUDA graph         & \checkmark               & $0.0$\%             & $0.0$\% \\
         \midrule
-        SGLang, L4     & hook, CUDA graphs on                & $\times$ \textbf{0/128}  & $+0.1$\%            & $0.0$\% \\
+        SGLang, L4     & hook, CUDA graphs on                & $\times$ \textbf{0/128}  & N/A                 & N/A \\
                        & hook, CUDA graphs off               & \checkmark               & $\mathbf{+10.6}$\%$^*$ & $\mathbf{+8.3}$\%$^*$ \\
-                       & \texttt{return\_hidden\_states}     & $\times$ final layer     & $+0.1$\%            & $+0.2$\% \\
+                       & \texttt{return\_hidden\_states}     & $\times$ final layer     & N/A                 & N/A \\
         \midrule
-        vLLM, L4       & hook, CUDA graphs on                & $\times$ \textbf{0/128}  & $0.0$\%             & $+0.1$\% \\
+        vLLM, L4       & hook, CUDA graphs on                & $\times$ \textbf{0/128}  & N/A                 & N/A \\
                        & hook, \texttt{enforce\_eager}       & \checkmark               & $\mathbf{+2.6}$\%   & $\mathbf{+2.6}$\% \\
                        & \texttt{extract\_hidden\_states}$^\dagger$ & after request   & $+2.0$\%            & $\mathbf{+14.6}$\% \\
         \bottomrule
@@ -293,7 +293,8 @@
         Every path that runs the probe matches HF's p(true) on 8/8 statements.
     \end{itemize}
 
-    {\footnotesize Laptop: Apple Silicon, fp32, 48-token decode, 20 runs (95\% CIs
+    {\footnotesize N/A: no layer-15 score (hook never ran, or final layer only).
+    Laptop: Apple Silicon, fp32, 48-token decode, 20 runs (95\% CIs
     $[-1.9, +2.2]$ and $[+17.7, +21.7]$). GPU: NVIDIA L4, bf16, 256 $\rightarrow$ 128
     tokens, median of 3. $^*$Also turns off SGLang's overlap scheduler.
     $^\dagger$vs.\ vLLM's default on the same multiprocess engine. The L4 is

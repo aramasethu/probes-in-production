@@ -37,7 +37,7 @@ SPEC = {
         ("eager_hook_device", "default", "eager + hook, probe on device"),
         ("eager_hook_cpu", "default", "eager + hook, probe via .cpu()"),
         ("default_hook_device", "default", "graphs on + hook (hook mostly silent)"),
-        ("extract_hs", "default", "extract_hidden_states (to /dev/shm)"),
+        ("extract_hs", "default_mp", "extract_hidden_states (to /dev/shm)"),
     ],
     "sglang": [
         ("nograph", "default", "CUDA graphs off (no probe)"),

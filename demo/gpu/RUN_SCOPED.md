@@ -78,7 +78,7 @@ $P "tmux new -d -s hf     \"$R && .venvs/hf/bin/python run.py hf     --modes cor
 # when hf finishes:
 $P "tmux new -d -s sglang \"$R && .venvs/hf/bin/python run.py sglang --modes default,default_hook_device,nograph,nograph_hook_device,return_hidden_last,correctness_hook 2>&1 | tee results_sglang.log\""
 # when sglang finishes:
-$P "tmux new -d -s vllm   \"$R && .venvs/hf/bin/python run.py vllm   --modes default,default_hook_device,eager,eager_hook_device,extract_hs,correctness_hook,correctness_extract 2>&1 | tee results_vllm.log\""
+$P "tmux new -d -s vllm   \"$R && .venvs/hf/bin/python run.py vllm   --modes default,default_mp,default_hook_device,eager,eager_hook_device,extract_hs,correctness_hook,correctness_extract 2>&1 | tee results_vllm.log\""
 ```
 
 Run the three engines **one after another**, never at the same time (one GPU). `run.py` ends
@@ -101,6 +101,7 @@ with an OK/FAIL summary per mode.
 | vLLM | `default_hook_device` | the gap, as SGLang (may also **error** — that's evidence too; record it) | `hook fired N times`, expect ≈ 0 |
 | vLLM | `eager` | cost of `enforce_eager` | slower than `default` |
 | vLLM | `eager_hook_device` | only live way today; probe adds ≈0 over `eager` | `hook fired` ≈ 128 |
+| vLLM | `default_mp` | baseline for `extract_hs` (multiprocess engine core, which extraction needs) | — |
 | vLLM | `extract_hs` | **cost of vLLM's sanctioned mid-layer path** (layer 15, decode tokens, to `/dev/shm`) | finishes; rows appear in CSV |
 | vLLM | `correctness_hook` / `correctness_extract` | both paths reproduce the HF probe | as SGLang; extract also prints a shape line `(263, 1, 1536)` |
 

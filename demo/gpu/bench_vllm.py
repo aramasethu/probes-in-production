@@ -60,9 +60,21 @@ import argparse
 import fcntl
 import os
 import shutil
+import sys
 
 # --- must be set before importing vllm --------------------------------------
 _MP = os.environ.get("PROBE_VLLM_MP", "0") == "1"
+# extract_hidden_states MUST use the multiprocess engine core. The connector
+# hands finished requests' pending saves to its writer only on the engine's
+# NEXT step (build_connector_meta). The multiprocess EngineCore keeps stepping
+# while finished requests await connector cleanup (scheduler.has_requests());
+# the in-process client only steps while LLM.generate() has unfinished outputs,
+# so after generate() returns nothing ever writes the file and waiting on its
+# lock deadlocks (observed on an L4, 2026-10-20). default_mp is the matching
+# baseline (same topology, no extraction).
+_MP_MODES = ("extract_hs", "correctness_extract", "default_mp")
+if any(m in " ".join(sys.argv) for m in _MP_MODES):
+    _MP = True
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "1" if _MP else "0"
 if _MP:
     os.environ["VLLM_ALLOW_INSECURE_SERIALIZATION"] = "1"
@@ -77,7 +89,7 @@ import common_gpu as C  # noqa: E402
 SHM_DIR = "/dev/shm/probe_vllm_hs"
 MAX_MODEL_LEN = 1024                     # 256 prompt + 128 output fits
 MAX_BATCHED = 8192                       # 32 x 256 prefill in one step; >= max_model_len
-BENCH_MODES = ["default", "eager", "eager_hook_device", "eager_hook_cpu",
+BENCH_MODES = ["default", "default_mp", "eager", "eager_hook_device", "eager_hook_cpu",
                "default_hook_device", "extract_hs"]
 
 
@@ -244,6 +256,7 @@ def main() -> None:
                    sync=torch.cuda.synchronize)
     notes = {
         "default": "CUDA graphs + VLLM_COMPILE (defaults)",
+        "default_mp": "defaults, multiprocess engine core (baseline for extract_hs)",
         "eager": "enforce_eager=True (no compile, no CUDA graphs)",
         "eager_hook_device": f"enforce_eager + forward hook layers[{mi}], probe on device",
         "eager_hook_cpu": f"enforce_eager + forward hook layers[{mi}], .cpu() per forward",

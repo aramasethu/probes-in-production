@@ -27,6 +27,7 @@
 \usepackage{qrcode}    % QR code to the repo
 
 % grey box for numbers that are still being measured (none left)
+\newlength{\QRPUSH}\setlength{\QRPUSH}{9cm}
 \newcommand{\PH}{\textcolor{gray}{\rule{1.6em}{0.7em}}}
 
 % ====================
@@ -141,7 +142,7 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/decode_step_probe.png}
+      \includegraphics[width=\linewidth]{figures/decode_step_probe.png}
     \end{figure}
 
     One decode step of \textbf{Qwen2.5-1.5B} (28 layers), the model we measure,
@@ -220,6 +221,7 @@
 
   \end{exampleblock}
 
+  \vspace{\QRPUSH}  % push the QR block to the bottom of column 2
   \begin{block}{Code, data and upstream work}
 
     \begin{columns}[c]

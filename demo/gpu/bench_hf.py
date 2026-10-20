@@ -55,6 +55,10 @@ class Decoder:
         if mode.startswith("compile"):
             # mode="reduce-overhead" == inductor + CUDA graphs (cudagraph trees)
             kw = {"mode": "reduce-overhead"} if compile_backend is None else {"backend": compile_backend}
+            # transformers installs output-capture hooks lazily under a threading.Lock,
+            # which dynamo can't trace (fullgraph=True); install them eagerly first.
+            from transformers.utils.output_capturing import maybe_install_capturing_hooks
+            maybe_install_capturing_hooks(model.model)
             step = torch.compile(step, fullgraph=True, dynamic=False, **kw)
         self.step = step
 

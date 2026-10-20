@@ -11,8 +11,11 @@ Model: `Qwen/Qwen2.5-1.5B-Instruct`, run in bf16 in every engine. The probe is t
 folded `StandardScaler + LogisticRegression` from `../best_probe.joblib`, stored as
 one affine map `p = sigmoid(h @ w + b)` in `probe.npz`.
 
-> **Status: written and smoke-tested on a Mac. Not yet run on a GPU.** See
-> [What could not be verified without a GPU](#what-could-not-be-verified-without-a-gpu).
+> **Status: run on one NVIDIA L4 on 2026-10-20** (HF, SGLang and most vLLM modes).
+> Fixes found on the GPU are committed: `torch.compile` needs transformers' output
+> hooks installed first (`bench_hf.py`), and vLLM `extract_hidden_states` only works
+> with the multiprocess engine core (`bench_vllm.py`). The list below was written
+> before the run.
 
 ## Pinned versions
 

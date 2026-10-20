@@ -27,7 +27,7 @@
 \usepackage{qrcode}    % QR code to the repo
 
 % grey box for numbers that are still being measured (none left)
-\newlength{\QRPUSH}\setlength{\QRPUSH}{9cm}
+\newlength{\COLGAP}\setlength{\COLGAP}{4.3cm}  % equal gaps between column-2 blocks
 \newcommand{\PH}{\textcolor{gray}{\rule{1.6em}{0.7em}}}
 
 % ====================
@@ -194,7 +194,8 @@
   \end{block}
 
   % ---- the math, in the grey (example) block ----
-    \begin{exampleblock}{The math of serving a probe}
+  \vspace{\COLGAP}
+  \begin{exampleblock}{The math of serving a probe}
 
     \heading{1. The probe's math is tiny}
 
@@ -221,7 +222,7 @@
 
   \end{exampleblock}
 
-  \vspace{\QRPUSH}  % push the QR block to the bottom of column 2
+  \vspace{\COLGAP}
   \begin{block}{Code, data and upstream work}
 
     \begin{columns}[c]

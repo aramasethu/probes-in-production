@@ -148,20 +148,13 @@
     in vLLM / SGLang. Every optimization removes something a probe needs:
 
     \begin{itemize}
-      \item \textbf{CUDA graphs:} decode is one graph replay, so Python hooks never fire.
-      \item \textbf{Continuous batching:} activations are one flat
-        \texttt{[num\_tokens, 1536]} tensor shared by all requests.
-      \item \textbf{Fused add+RMSNorm:} the residual stream $h+r$ is never stored;
-        it is overwritten in place by the next layer.
-      \item \textbf{Prefix caching \& speculative decoding:} cached tokens produce
-        no activations; drafted tokens may be rejected.
-      \item \textbf{Final slice:} only last-token, final-layer states reach the output.
-    \end{itemize}
-
-    \textbf{Yet the probe is tiny:} 3 kFLOPs/token, about $10^{-6}$ of the forward pass.
-    Copying out all 29 hidden states instead costs 87\,KiB/token, 3$\times$ the KV cache.
-    \textbf{Run the probe in the graph, as ``layer 29'',} and return one float per
-    token, like a logprob.
+  \item Optimization during prefill: prefix caching and chunked prefill skip or
+    split prompt tokens, so a probe never sees cached tokens and gets a long
+    prompt's last token only in the final chunk.
+  \item Optimization during decode: CUDA graphs and CPU--GPU overlap keep each
+    step on the GPU with no Python, so a hook never runs (0 of 128) and a
+    per-token \texttt{.cpu()} makes the GPU wait (+19\%).
+\end{itemize}
 
 \end{block}
 
@@ -192,9 +185,7 @@
       \end{tabular}
     \end{table}
 
-    \textbf{What's missing:} an in-graph tap at layer $k$, a per-token score
-    output, per-request probe state that survives prefix caching and
-    speculative-decoding rollback, and a scheduler hook to abort or escalate.
+    What we need is support for a probe to run inside the CUDA graph, return a running score with each generated token even with caching and speculative decoding, and let that score trigger further action.
 
     {\footnotesize Open proposals: vLLM \#59542, \#36998; SGLang \#43449, \#43450.
     Ours: SGLang \#45317 (bug), \#45318 (docs fix) (Oct 2026).}
@@ -202,9 +193,9 @@
   \end{block}
 
   % ---- the math, in the grey (example) block ----
-  \begin{exampleblock}{The math of serving a probe}
+    \begin{exampleblock}{The math of serving a probe}
 
-    \heading{1. The probe is free}
+    \heading{1. The probe's math is tiny}
 
     Linear probe on hidden size $d$ vs.\ a model with $N$ parameters (FLOPs and bytes per step):
     \[
@@ -223,20 +214,9 @@
       \;\overset{t_{\text{gpu}} \ge t_{\text{cpu}}}{=}\;
       \frac{t_{\text{cpu}} + t_{\text{copy}}}{t_{\text{gpu}}}
     \]
-    $t_{\text{copy}}$ is tiny (3\,KiB/token $\approx 0.1\,\mu$s over PCIe).
+    $t_{\text{copy}}$ is tiny (3\,KiB/token in bf16 $\approx 0.1\,\mu$s over PCIe).
     Laptop: $27.6 \rightarrow 32.9$\,ms/token, i.e.\ $5.3/27.6 = 19\%$.
     \emph{Prediction: a faster GPU (smaller $t_{\text{gpu}}$) makes it worse.}
-
-    \heading{3. Linear probes survive tensor parallelism}
-
-    Across $P$ GPUs the tapped vector is the shared residual plus per-GPU
-    partial outputs, $x = r + \sum_{i=1}^{P} o_i$, so
-    \[
-      p = \sigma\!\Big( w^\top r + b + \sum_{i=1}^{P} w^\top o_i \Big)
-    \]
-    Each GPU scores its own shard; all-reduce \emph{one scalar} per token
-    instead of $d = 1536$. (The sigmoid comes after the sum, so this holds;
-    an MLP probe with a hidden ReLU does not split this way.)
 
   \end{exampleblock}
 

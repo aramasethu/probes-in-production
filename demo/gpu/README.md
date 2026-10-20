@@ -23,7 +23,18 @@ one affine map `p = sigmoid(h @ w + b)` in `probe.npz`.
 | `.venvs/sglang` | `sglang==0.5.21` (pulls `torch==2.13.0`, `transformers==5.12.1`, `flashinfer_python[cu13]==0.6.18`) | **must stay pinned**: SGLang `main` has a decoder-layer refactor that breaks the `(hidden, residual)` hooks |
 
 Both engines' 2026 wheels target CUDA 13, so the box needs an **NVIDIA driver ≥ 580**
-(`nvidia-smi` should show `CUDA Version: 13.x`). Pick a provider image that has it.
+(`nvidia-smi` should show `CUDA Version: 13.x`). The image must also be **Ubuntu 22.04
+or newer (glibc ≥ 2.34)**: `sglang==0.5.21` only ships `manylinux_2_34` wheels.
+`setup.sh` checks both before installing anything.
+
+Resolved on 2026-10-19 with `uv pip compile --python-version 3.12 --python-platform
+x86_64-manylinux_2_34 --torch-backend cu130` (no GPU needed):
+
+| venv | key resolved versions |
+|---|---|
+| hf | torch 2.13.0+cu130, transformers 5.9.0 |
+| vllm | vllm 0.31.0, torch 2.13.0+cu130, transformers 5.17.0, flashinfer-python 0.7.0.post1 |
+| sglang | sglang 0.5.21, sglang-kernel 0.4.7, torch 2.13.0+cu130, transformers 5.12.1, flashinfer-python 0.6.18 |
 
 ## Which layer is "layer 14" (or 15)?
 

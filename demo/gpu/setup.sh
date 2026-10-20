@@ -14,6 +14,16 @@ nvidia-smi
 echo ">> need an NVIDIA driver that supports CUDA 13 (driver >= 580; 'CUDA Version: 13.x' above)."
 echo ">> if it says 12.x, try TORCH_BACKEND=cu129 bash setup.sh (unverified for sglang's flashinfer[cu13])."
 
+# sglang 0.5.21 only ships manylinux_2_34 wheels -> glibc >= 2.34 (Ubuntu 22.04+).
+# (Checked 2026-10-19 with `uv pip compile --python-platform x86_64-manylinux_2_34`;
+#  all three venvs resolve there, sglang fails on manylinux_2_28.)
+GLIBC=$(ldd --version | head -1 | grep -oE '[0-9]+\.[0-9]+$')
+echo ">> glibc $GLIBC"
+if [ "$(printf '%s\n2.34\n' "$GLIBC" | sort -V | head -1)" != "2.34" ]; then
+  echo "!! glibc < 2.34: sglang==0.5.21 has no wheel for this image. Use an Ubuntu 22.04+ template."; exit 1
+fi
+df -h /dev/shm / | sed 's/^/>> /'
+
 command -v uv >/dev/null || { curl -LsSf https://astral.sh/uv/install.sh | sh; export PATH="$HOME/.local/bin:$PATH"; }
 
 mkdir -p .venvs

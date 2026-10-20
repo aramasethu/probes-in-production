@@ -131,8 +131,8 @@
     \begin{itemize}
       \item \textbf{Cascade:} the probe screens 100\% of traffic and escalates
         ${\sim}$5--8\% to an LLM classifier.
-      \item \textbf{The math is free:} an all-layer probe costs ${\sim}$377K
-        FLOPs/token vs.\ ${\sim}$8 GFLOPs/token for a 4B model.
+      \item \textbf{The math is free:} an all-layer probe on Qwen2.5-1.5B costs
+        ${\sim}$89K FLOPs/token vs.\ ${\sim}$3 GFLOPs/token for the model.
       \item \textbf{The serving is not:} no lab publishes latency or how
         activations leave its engine; every decode-time blocking probe runs on
         an engine its operator owns or forked.
@@ -148,28 +148,27 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width=0.96\linewidth]{figures/qwen35_decode_step.png}
+      \includegraphics[width=0.96\linewidth]{figures/qwen25_decode_step.png}
     \end{figure}
 
-    One decode step of \textbf{Qwen3.5-9B} (24 Gated DeltaNet + 8 attention
-    layers) in vLLM / SGLang. Every optimization removes something a probe needs:
+    One decode step of \textbf{Qwen2.5-1.5B} (28 layers), the model we measure,
+    in vLLM / SGLang. Every optimization removes something a probe needs:
 
     \begin{itemize}
       \item \textbf{CUDA graphs:} decode is one graph replay, so Python hooks never fire.
       \item \textbf{Continuous batching:} activations are one flat
-        \texttt{[num\_tokens, 4096]} tensor shared by all requests.
+        \texttt{[num\_tokens, 1536]} tensor shared by all requests.
       \item \textbf{Fused add+RMSNorm:} the residual stream $h+r$ is never stored;
-        it is overwritten in place (SGLang: not even summed until the next layer).
-      \item \textbf{Prefix caching \& MTP speculation:} cached tokens produce no
-        activations; drafted tokens may be rejected.
+        it is overwritten in place by the next layer.
+      \item \textbf{Prefix caching \& speculative decoding:} cached tokens produce
+        no activations; drafted tokens may be rejected.
       \item \textbf{Final slice:} only last-token, final-layer states reach the output.
     \end{itemize}
 
-    \textbf{Yet the probe is tiny:} 8 kFLOPs/token, about $10^{-6}$ of the forward pass.
-    Copying out all 33 layers' activations instead costs 264\,KiB/token, 8$\times$ the KV cache.
-    \textbf{Run the probe in the graph, as ``layer 33''.} Engines already manage a
-    per-request recurrent state for GDN (49\,MiB/seq, rolled back under MTP); a probe's
-    EMA is one more float.
+    \textbf{Yet the probe is tiny:} 3 kFLOPs/token, about $10^{-6}$ of the forward pass.
+    Copying out all 29 hidden states instead costs 87\,KiB/token, 3$\times$ the KV cache.
+    \textbf{Run the probe in the graph, as ``layer 29'',} and return one float per
+    token, like a logprob.
 
 \end{block}
 
@@ -201,8 +200,8 @@
     \end{table}
 
     \textbf{What's missing:} an in-graph tap at layer $k$, a per-token score
-    output, per-request probe state that survives prefix caching and MTP
-    rollback, and a scheduler hook to abort or escalate.
+    output, per-request probe state that survives prefix caching and
+    speculative-decoding rollback, and a scheduler hook to abort or escalate.
 
     {\footnotesize Open proposals: vLLM \#59542, \#36998; SGLang \#43449, \#43450.
     Ours: SGLang \#45317 (bug), \#45318 (docs fix) (Oct 2026).}
@@ -217,8 +216,8 @@
     Linear probe on hidden size $d$ vs.\ a model with $N$ parameters (FLOPs and bytes per step):
     \[
       \frac{\text{probe}}{\text{model}} \approx \frac{2d}{2N}
-      = \frac{4096}{9\times 10^{9}} \approx 5\times 10^{-7}
-      \qquad \text{(Qwen3.5-9B)}
+      = \frac{1536}{1.5\times 10^{9}} \approx 10^{-6}
+      \qquad \text{(Qwen2.5-1.5B)}
     \]
 
     \heading{2. Copying out costs waiting, not bandwidth}
@@ -231,7 +230,7 @@
       \;\overset{t_{\text{gpu}} \ge t_{\text{cpu}}}{=}\;
       \frac{t_{\text{cpu}} + t_{\text{copy}}}{t_{\text{gpu}}}
     \]
-    $t_{\text{copy}}$ is tiny (8\,KiB/token $\approx 0.3\,\mu$s over PCIe).
+    $t_{\text{copy}}$ is tiny (3\,KiB/token $\approx 0.1\,\mu$s over PCIe).
     Laptop: $27.6 \rightarrow 32.9$\,ms/token, i.e.\ $5.3/27.6 = 19\%$.
     \emph{Prediction: a faster GPU (smaller $t_{\text{gpu}}$) makes it worse.}
 
@@ -243,7 +242,7 @@
       p = \sigma\!\Big( w^\top r + b + \sum_{i=1}^{P} w^\top o_i \Big)
     \]
     Each GPU scores its own shard; all-reduce \emph{one scalar} per token
-    instead of $d = 4096$. (The sigmoid comes after the sum, so this holds;
+    instead of $d = 1536$. (The sigmoid comes after the sum, so this holds;
     an MLP probe with a hidden ReLU does not split this way.)
 
   \end{exampleblock}
@@ -340,7 +339,7 @@
 
     \begin{itemize}
       \item \textbf{More models, especially bigger ones.} Repeat these runs on
-        larger models (e.g.\ Qwen3.5-9B, above; MoE) and on faster GPUs, where
+        larger models (e.g.\ Qwen3.5-9B, MoE) and on faster GPUs, where
         the cost model predicts leaving the graph costs more.
       \item \textbf{Different probes for different jobs.} Truthfulness is one;
         safety screens (cyber, prompt injection), hallucination, and attention

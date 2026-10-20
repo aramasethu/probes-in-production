@@ -26,7 +26,7 @@
 \usepackage{amssymb}   % \checkmark
 \usepackage{qrcode}    % QR code to the repo
 
-% grey box for numbers that are still being measured
+% grey box for numbers that are still being measured (none left)
 \newcommand{\PH}{\textcolor{gray}{\rule{1.6em}{0.7em}}}
 
 % ====================
@@ -148,7 +148,7 @@
 
     \begin{figure}
       \centering
-      \includegraphics[width=\linewidth]{figures/qwen35_decode_step.png}
+      \includegraphics[width=0.96\linewidth]{figures/qwen35_decode_step.png}
     \end{figure}
 
     One decode step of \textbf{Qwen3.5-9B} (24 Gated DeltaNet + 8 attention
@@ -193,7 +193,7 @@
         \textbf{Route} & \textbf{Status} & \textbf{Catch} \\
         \midrule
         Python hook on layer $k$ & CUDA graphs off only & Runs \textbf{0 of 128} steps with graphs on (measured) \\
-        vLLM \texttt{extract\_hidden\_states} & Works, graphs on & After the request ends; written to disk \\
+        vLLM \texttt{extract\_hidden\_states} & Works, graphs on & Written to disk after the request; +15\% at batch 32 \\
         SGLang \texttt{return\_hidden\_states} & Works, graphs on & Final layer only \\
         Probe inside the graph & Not upstream & Shipped only in a private SGLang fork \\
         \bottomrule
@@ -257,8 +257,8 @@
       \end{column}
       \begin{column}{0.72\linewidth}
         \textbf{github.com/aramasethu/probes-in-production}\\[0.2em]
-        {\small Laptop pipeline, GPU benchmarks (HF, vLLM 0.31.0, SGLang 0.5.21)
-        and raw results. Upstream: SGLang \#45317 (bug), \#45318 (docs fix).}
+        {\small Laptop pipeline and GPU benchmarks (HF, vLLM 0.31.0, SGLang 0.5.21).
+        Upstream: SGLang \#45317 (bug), \#45318 (docs fix).}
       \end{column}
     \end{columns}
 
@@ -274,7 +274,7 @@
 
   \begin{block}{Results}
 
-    \heading{The signal is real (laptop)}
+    \heading{Laptop: the signal is real}
 
     \begin{figure}
       \centering
@@ -287,7 +287,7 @@
     baseline scores \textbf{0.50}. Factual recall is near-perfect; arithmetic
     is at chance.
 
-    \heading{What serving the probe costs (laptop and GPU)}
+    \heading{Laptop and GPU: what serving the probe costs}
 
     Extra time per token vs.\ the same setup without the probe (laptop, HF)
     or the engine's default with CUDA graphs on (vLLM, SGLang).
@@ -310,7 +310,7 @@
         \midrule
         vLLM, L4       & hook, CUDA graphs on                & $\times$ \textbf{0/128}  & $0.0$\%             & $+0.1$\% \\
                        & hook, \texttt{enforce\_eager}       & \checkmark               & $\mathbf{+2.6}$\%   & $\mathbf{+2.6}$\% \\
-                       & \texttt{extract\_hidden\_states}    & after request            & \PH\%               & \PH\% \\
+                       & \texttt{extract\_hidden\_states}$^\dagger$ & after request   & $+2.0$\%            & $\mathbf{+14.6}$\% \\
         \bottomrule
       \end{tabular}}
     \end{table}
@@ -318,18 +318,19 @@
     \begin{itemize}
       \item \textbf{The probe is free where it runs in place:} on device
         ($-0.6$\%, within noise) or inside the CUDA graph (0.0\%).
-      \item \textbf{Leaving the device or the graph is the bill:} \texttt{.cpu()}
-        per token +19\%; turning CUDA graphs off so a hook can run +3\% (vLLM)
-        to +11\% (SGLang).
-      \item \textbf{With CUDA graphs on, hooks never run} (0 of 128 forward
-        passes). When they do run, SGLang's p(true) matches HF on 8/8 statements.
+      \item \textbf{Getting data out is the bill:} \texttt{.cpu()} per token
+        +19\%; CUDA graphs off so a hook runs +3\% (vLLM) to +11\% (SGLang);
+        vLLM \texttt{extract\_hidden\_states} +15\% at batch 32.
+      \item \textbf{With CUDA graphs on, hooks never run} (0 of 128 passes).
+        Every path that runs the probe matches HF's p(true) on 8/8 statements.
     \end{itemize}
 
     {\footnotesize Qwen2.5-1.5B-Instruct, probe at layer 15. Laptop: Apple
     Silicon, fp32, 48-token decode, 20 runs (95\% CIs $[-1.9, +2.2]$ and
     $[+17.7, +21.7]$). GPU: NVIDIA L4, bf16, 256 $\rightarrow$ 128 tokens,
     median of 3; vLLM 0.31.0, SGLang 0.5.21. $^*$Also turns off SGLang's overlap
-    scheduler. The L4 is memory-bound, so graph losses grow on faster GPUs.
+    scheduler. $^\dagger$vs.\ vLLM's default on the same multiprocess engine.
+    The L4 is memory-bound, so graph losses grow on faster GPUs.
     \textit{Caveat:} a probe trained on bare statements misfires in a chat
     template (AUC 0.95); train on the deployment format.}
 

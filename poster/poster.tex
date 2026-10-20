@@ -110,9 +110,7 @@
 
     \begin{block}{Probes in production}
 
-    \textbf{Activation probes are small classifiers that read a model's hidden
-    states. In 2026 they moved from research into frontier serving, and every
-    public deployment is a safety screen.}
+    \textbf{Activation probes are a well known interpretability tool. They are used extensively for safety by frontier labs. It is currently not straightforward to serve them on open models in production. This poster scratches the surface of whether it is possible to serve them alongside optimized inference, and what it costs.}
 
     \begin{table}
       \centering
@@ -129,13 +127,8 @@
     \end{table}
 
     \begin{itemize}
-      \item \textbf{Cascade:} the probe screens 100\% of traffic and escalates
-        ${\sim}$5--8\% to an LLM classifier.
-      \item \textbf{The math is free:} an all-layer probe on Qwen2.5-1.5B costs
-        ${\sim}$89K FLOPs/token vs.\ ${\sim}$3 GFLOPs/token for the model.
-      \item \textbf{The serving is not:} no lab publishes latency or how
-        activations leave its engine; every decode-time blocking probe runs on
-        an engine its operator owns or forked.
+      \item Probes are generally the first step in safety stack and 100\% of traffic goes through them and they then escalate ${\sim}$5--8\% to an LLM classifier.
+      \item How frontier labs serve these probes while keeping inference optimized is unclear; the ones we found run on engines they own or have forked.
     \end{itemize}
 
     {\footnotesize Sources: Anthropic system cards \& arXiv 2601.04603; GDM
@@ -144,7 +137,7 @@
 
   \end{block}
 
-  \begin{block}{What optimized serving hides}
+  \begin{block}{Optimized serving vs what serving a probe needs}
 
     \begin{figure}
       \centering
@@ -341,11 +334,11 @@
       \item \textbf{More models, especially bigger ones.} Repeat these runs on
         larger models (e.g.\ Qwen3.5-9B, MoE) and on faster GPUs, where
         the cost model predicts leaving the graph costs more.
-      \item \textbf{Different probes for different jobs.} Truthfulness is one;
-        safety screens (cyber, prompt injection), hallucination, and attention
-        or multi-layer probes like those in production. Nonlinear (MLP) probes
-        do not split across tensor parallelism (math, part 3). Train each in the
+      \item \textbf{Different probes for different jobs:} safety screens,
+        hallucination, attention or multi-layer probes, each trained in the
         format it is served in.
+      \item \textbf{With speculative decoding on:} score only accepted tokens;
+        vLLM's \texttt{extract\_hidden\_states} takes the draft model's slot.
     \end{itemize}
 
   \end{block}
